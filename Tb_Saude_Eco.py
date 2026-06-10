@@ -21,6 +21,8 @@ CREATE TABLE Saude_Eco (
     economy VARCHAR(10),
     Inflation_IPC DECIMAL(18,4),
     GDP_USD DECIMAL(18,2),
+    qtd_vendida DECIMAL(18,2),
+    vlr_vendido DECIMAL(18,2),
     Population_2011 BIGINT
 )
 """)
@@ -30,7 +32,9 @@ SELECT
     Country,
     economy,
     Inflation_IPC,
-    GDP_USD
+    GDP_USD,
+    SUM(Quantity) AS qtd_vendida,
+    SUM(Quantity * UnitPrice) AS vlr_vendido
 FROM ecommerce_sales
 GROUP BY
     Country,
@@ -41,7 +45,7 @@ GROUP BY
 
 dados = cursor.fetchall()
 
-for country, economy, inflation, gdp in dados:
+for country, economy, inflation, GDP_USD, qtd_vendida, vlr_vendido in dados:
 
     populacao = None
 
@@ -67,20 +71,24 @@ for country, economy, inflation, gdp in dados:
             economy,
             Inflation_IPC,
             GDP_USD,
+            qtd_vendida,
+            vlr_vendido,
             Population_2011
         )
-        VALUES (%s,%s,%s,%s,%s)
+        VALUES (%s,%s,%s,%s,%s,%s,%s)
     """, (
         country,
         economy,
         inflation,
-        gdp,
+        GDP_USD,
+        qtd_vendida,
+        vlr_vendido,
         populacao
     ))
 
 conexao.commit()
 
-print("Tabela Saude_Eco criada com população de 2011!")
+print("Tabela Saude_Eco criada com sucesso!")
 
 cursor.close()
 conexao.close()
