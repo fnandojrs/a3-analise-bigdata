@@ -15,7 +15,8 @@ CREATE TABLE produto AS
 SELECT
     es.StockCode,
     MIN(es.Description) AS Description,
-    AVG(es.UnitPrice) AS media
+    AVG(es.UnitPrice) AS media,
+		sum(es.Quantity) as QTD
 FROM ecommerce_sales es
 GROUP BY
     es.StockCode;
