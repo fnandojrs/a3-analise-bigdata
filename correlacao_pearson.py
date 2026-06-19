@@ -29,6 +29,7 @@ df = pd.read_sql("""
     FROM Saude_Eco
     WHERE Inflation_IPC IS NOT NULL
       AND qtd_vendida IS NOT NULL
+			and economy <>  'GBR'
 """, conexao)
 
 # Calcula o coeficiente de Pearson
